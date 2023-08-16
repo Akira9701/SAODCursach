@@ -1,48 +1,61 @@
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #include <iostream>
-#include <fstream>
-#include <vector>
-#include <sstream>
+#include <ctime>
 
-struct Deposit
+using namespace std;
+
+struct record
 {
-	std::string depositorName;
-	std::string depositAmount;
-	std::string depositDate;
-	std::string lawyerName;
+	char author[12];
+	char title[32];
+	char publisher[16];
+	short int year;
+	short int num_of_page;
+};
+
+struct record1
+{
+	char a[30];
+	short int b;
+	char c[22];
+	char d[10];
+};
+
+struct record2
+{
+	char a[30];
+	unsigned short int b;
+	char c[10];
+	char d[22];
+};
+
+struct record3
+{
+	char a[32];
+	char b[18];
+	short int c;
+	short int d;
+	char e[10];
 };
 
 int main()
 {
-	std::ifstream file("file.dat");
-
-	if (file.is_open())
+	FILE *fp;
+	fp = fopen("file.dat", "rb");
+	// record tt[4000] = {0};
+	// record1 mas[4000] = {0};
+	record2 mas2[4000] = {0};
+	// record3 mas3[4000] = {0};
+	int i = 0, sum = 0;
+	int ch[10];
+	i = fread((record2 *)mas2, sizeof(record2), 4000, fp);
+	i = 0;
+	while ((i++) < 4000)
 	{
-		std::vector<Deposit> deposits;
-		std::string line;
-
-		while (std::getline(file, line))
-		{
-			Deposit deposit;
-			deposit.depositorName = line.substr(0, 30);
-			deposit.depositAmount = line.substr(30, 5);
-			deposit.depositDate = line.substr(36, 10);
-			deposit.lawyerName = line.substr(46, 22);
-			deposits.push_back(deposit);
-		}
-
-		file.close();
-
-		for (const Deposit &deposit : deposits)
-		{
-			std::cout << "fio vklad: " << deposit.depositorName
-								<< ", Sum: " << deposit.depositAmount
-								<< ", Date: " << deposit.depositDate
-								<< ", Fio loyer: " << deposit.lawyerName << std::endl;
-		}
-	}
-	else
-	{
-		std::cout << "Не удалось открыть файл." << std::endl;
+		// getchar();
+		cout << mas2[i].a << " " << mas2[i].b << " " << mas2[i].c << " " << mas2[i].d << endl;
 	}
 
 	return 0;
