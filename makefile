@@ -2,7 +2,7 @@
 CC = g++
 
 # Опции компиляции
-CFLAGS = -Wall -Wextra -std=c11
+CFLAGS = -Wall -Wextra
 
 # Имя исполняемого файла
 TARGET = app

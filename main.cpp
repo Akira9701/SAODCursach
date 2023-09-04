@@ -55,6 +55,37 @@ void heapSortByFieldA(record2 arr[], int n)
 	}
 }
 
+// Пирамидальная сортировка по полю 'b' (от большего к меньшему)
+void heapifyByFieldB(record2 arr[], int n, int i)
+{
+	int largest = i;
+	int l = 2 * i + 1;
+	int r = 2 * i + 2;
+
+	if (l < n && arr[l].b > arr[largest].b)
+		largest = l;
+
+	if (r < n && arr[r].b > arr[largest].b)
+		largest = r;
+
+	if (largest != i)
+	{
+		swapRecords(arr[i], arr[largest]);
+		heapifyByFieldB(arr, n, largest);
+	}
+}
+
+void heapSortByFieldB(record2 arr[], int n)
+{
+	for (int i = n / 2 - 1; i >= 0; i--)
+		heapifyByFieldB(arr, n, i);
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		swapRecords(arr[0], arr[i]);
+		heapifyByFieldB(arr, i, 0);
+	}
+}
 int main()
 {
 	int counter = 0;
@@ -66,35 +97,59 @@ int main()
 	int i = 0;
 	i = fread((record2 *)mas2, sizeof(record2), 4000, fp);
 	i = 0;
-	heapSortByFieldA(mas2, 4000); // Сортировка по полю 'a'
+
+	cout << "Choose sorting field (name or sum) name/sum: ";
+	cin >> word;
+
+	if (word == "name")
+	{
+		heapSortByFieldA(mas2, 4000); // Сортировка по полю 'a'
+	}
+	else if (word == "sum")
+	{
+		heapSortByFieldB(mas2, 4000); // Сортировка по полю 'b'
+	}
+	else
+	{
+		cerr << "Invalid sorting field." << endl;
+		return 1;
+	}
 
 	cout << "Show list of users? (Y/N)" << endl;
 	cin >> word;
+
 	if (word == "y")
 	{
-		for (int i = counter; i < maxPage; i++)
+
+		while (counter < 4000)
 		{
-			cout << i + 1 << " " << mas2[i].a << " " << mas2[i].b << " " << mas2[i].c << " " << mas2[i].d << endl;
-		}
-		counter += 20;
-		maxPage += 20;
-	}
-	while (counter < 4000)
-	{
-		cout << "Continue? (Y/N)" << endl;
-		cin >> word;
-		if (word == "y")
-		{
-			for (int i = counter; i < maxPage; i++)
+
+			if (word == "y")
 			{
-				cout << i + 1 << " " << mas2[i].a << " " << mas2[i].b << " " << mas2[i].c << " " << mas2[i].d << endl;
+				cout << "\033[2J\033[1;1H";
+
+				cout << "Number"
+					 << "\t"
+					 << "Name"
+					 << "\t\t\t\t"
+					 << "Dolg"
+					 << "\t"
+					 << "Date"
+					 << "\t\t"
+					 << "Lowyer" << endl;
+				for (int i = counter; i < maxPage; i++)
+				{
+					cout << i + 1 << "\t" << mas2[i].a << "\t" << mas2[i].b << "\t" << mas2[i].c << "\t" << mas2[i].d << endl;
+				}
+				counter += 20;
+				maxPage += 20;
+				cout << "Continue? (Y/N)" << endl;
+				cin >> word;
 			}
-			counter += 20;
-			maxPage += 20;
-		}
-		else
-		{
-			exit;
+			else
+			{
+				return 0;
+			}
 		}
 	}
 
