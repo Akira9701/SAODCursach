@@ -88,8 +88,8 @@ void heapSortByFieldB(record2 arr[], int n)
 }
 int main()
 {
-	int counter = 0;
-	int maxPage = 20;
+	int counter = -20;
+	int maxPage = 0;
 	std::string word;
 	FILE *fp;
 	fp = fopen("file.dat", "rb");
@@ -124,8 +124,10 @@ int main()
 		while (counter < 4000)
 		{
 
-			if (word == "y")
+			if (word == "y" || word == "d")
 			{
+				counter += 20;
+				maxPage += 20;
 				cout << "\033[2J\033[1;1H";
 
 				cout << "Number"
@@ -141,13 +143,43 @@ int main()
 				{
 					cout << i + 1 << "\t" << mas2[i].a << "\t" << mas2[i].b << "\t" << mas2[i].c << "\t" << mas2[i].d << endl;
 				}
-				counter += 20;
-				maxPage += 20;
-				cout << "Continue? (Y/N)" << endl;
+
+				cout << endl;
+				cout << "Prev: a" << endl;
+				cout << "Next: d" << endl;
+				cout << "End: r" << endl;
+				cin >> word;
+			}
+			else if (word == "a")
+			{
+				counter -= 20;
+				maxPage -= 20;
+
+				cout << "\033[2J\033[1;1H";
+
+				cout << "Number"
+					 << "\t"
+					 << "Name"
+					 << "\t\t\t\t"
+					 << "Dolg"
+					 << "\t"
+					 << "Date"
+					 << "\t\t"
+					 << "Lowyer" << endl;
+				for (int i = counter; i < maxPage; i++)
+				{
+					cout << i + 1 << "\t" << mas2[i].a << "\t" << mas2[i].b << "\t" << mas2[i].c << "\t" << mas2[i].d << endl;
+				}
+
+				cout << endl;
+				cout << "Prev: a" << endl;
+				cout << "Next: d" << endl;
+				cout << "End: r" << endl;
 				cin >> word;
 			}
 			else
 			{
+				exit(0);
 				return 0;
 			}
 		}
