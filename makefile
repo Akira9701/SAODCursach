@@ -19,6 +19,8 @@ all: $(TARGET)
 # Правило для компиляции исполняемого файла
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET)
+	clear
+	./app
 
 # Правило для компиляции объектных файлов
 %.o: %.c

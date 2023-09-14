@@ -4,6 +4,8 @@
 #include <iostream>
 #include <ctime>
 #include <string>
+#include <cctype>
+#include <regex>
 
 using namespace std;
 
@@ -77,6 +79,15 @@ void heapSortByComplexKey(record2 arr[], int n)
 	}
 }
 
+bool isNumber(const std::string &str)
+{
+	// Регулярное выражение, которое соответствует целым числам (с или без знака)
+	std::regex pattern("^[-+]?\\d+$");
+
+	// Проверяем, соответствует ли строка регулярному выражению
+	return std::regex_match(str, pattern);
+}
+
 int main()
 {
 	int counter = -20;
@@ -114,6 +125,12 @@ int main()
 				counter -= 20;
 				maxPage -= 20;
 			}
+			else if (isNumber(word))
+			{
+
+				counter = std::stoi(word) * 20;
+				maxPage = 20 + std::stoi(word) * 20;
+			}
 			else
 			{
 				exit(0);
@@ -138,6 +155,7 @@ int main()
 			cout << endl;
 			cout << "Prev: a" << endl;
 			cout << "Next: d" << endl;
+			cout << "Any page: number" << endl;
 			cout << "End: r" << endl;
 			cin >> word;
 		}
