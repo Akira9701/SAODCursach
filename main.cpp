@@ -29,7 +29,7 @@ void swapRecords(record2 &a, record2 &b)
 int compareRecords(record2 &a, record2 &b)
 {
 	// Сравнение по первым 3 символам поля 'a'
-	int cmp = strncmp(a.a, b.a, 3);
+	int cmp = strncmp(a.a, b.a, 30);
 
 	// Если первые 3 символа одинаковы, сравнение по полю 'b'
 	if (cmp == 0)
