@@ -113,30 +113,32 @@ int getBalanceFactor(AVLNode* node) {
     return getHeight(node->left) - getHeight(node->right);
 }
 
-AVLNode* rotateRight(AVLNode* y) {
-    AVLNode* x = y->left;
-    AVLNode* T2 = x->right;
-
-    x->right = y;
-    y->left = T2;
-
-    y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
-    x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
-
-    return x;
+AVLNode* rotateLL(AVLNode* root) {
+    AVLNode* newRoot = root->left;
+    root->left = newRoot->right;
+    newRoot->right = root;
+    root->height = 1 + max(getHeight(root->left), getHeight(root->right));
+    newRoot->height = 1 + max(getHeight(newRoot->left), getHeight(newRoot->right));
+    return newRoot;
 }
 
-AVLNode* rotateLeft(AVLNode* x) {
-    AVLNode* y = x->right;
-    AVLNode* T2 = y->left;
+AVLNode* rotateRR(AVLNode* root) {
+    AVLNode* newRoot = root->right;
+    root->right = newRoot->left;
+    newRoot->left = root;
+    root->height = 1 + max(getHeight(root->left), getHeight(root->right));
+    newRoot->height = 1 + max(getHeight(newRoot->left), getHeight(newRoot->right));
+    return newRoot;
+}
 
-    y->left = x;
-    x->right = T2;
+AVLNode* rotateLR(AVLNode* root) {
+    root->left = rotateRR(root->left);
+    return rotateLL(root);
+}
 
-    x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
-    y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
-
-    return y;
+AVLNode* rotateRL(AVLNode* root) {
+    root->right = rotateLL(root->right);
+    return rotateRR(root);
 }
 
 AVLNode* insert(AVLNode* root, record2 data) {
@@ -157,26 +159,28 @@ AVLNode* insert(AVLNode* root, record2 data) {
         return root;
     }
 
-    root->height = 1 + max(getHeight(root->left), getHeight(root->right));
+
     int balance = getBalanceFactor(root);
 
     // Left Heavy
     if (balance > 1) {
         if (compareRecords(data, root->left->data) < 0) {
-            return rotateRight(root);
+            // LL
+            return rotateLL(root);
         } else {
-            root->left = rotateLeft(root->left);
-            return rotateRight(root);
+            // LR
+            return rotateLR(root);
         }
     }
 
     // Right Heavy
     if (balance < -1) {
         if (compareRecords(data, root->right->data) > 0) {
-            return rotateLeft(root);
+            // RR
+            return rotateRR(root);
         } else {
-            root->right = rotateRight(root->right);
-            return rotateLeft(root);
+            // RL
+            return rotateRL(root);
         }
     }
 
@@ -185,50 +189,6 @@ AVLNode* insert(AVLNode* root, record2 data) {
 
 
 
-struct TreeNode
-{
-    record2 data;
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode* next; // Связанный список объектов с одинаковым ключом b
-};
-
-// Функция для вставки нового объекта в связанный список
-TreeNode* insertIntoLinkedList(TreeNode* head, record2 data)
-{
-    TreeNode* newNode = new TreeNode;
-    newNode->data = data;
-    newNode->left = nullptr;
-    newNode->right = nullptr;
-    newNode->next = head;
-    return newNode;
-}
-
-// Функция для вставки объекта в AVL-дерево
-TreeNode* insertNode(TreeNode* node, record2 data)
-{
-    if (node == nullptr)
-    {
-        TreeNode* newNode = new TreeNode;
-        newNode->data = data;
-        newNode->left = nullptr;
-        newNode->right = nullptr;
-        newNode->next = nullptr;
-        return newNode;
-    }
-
-    if (data.b == node->data.b)
-    {
-        // Вставляем объект в связанный список текущего узла
-        node->next = insertIntoLinkedList(node->next, data);
-    }
-    else if (data.b < node->data.b)
-        node->left = insertNode(node->left, data);
-    else
-        node->right = insertNode(node->right, data);
-
-    return node;
-}
 
 // Функция для обхода и вывода объектов в дереве
 
